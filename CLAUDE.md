@@ -121,10 +121,19 @@ That is why the two chapters are handled by different mappings in `PASSAGES`.
 
 1. **`after` is the divider, and empty means the next word is written onto this
    one.** The ETCBC splits a prefixed particle and an Aramaic emphatic ending
-   into words of their own. Forcing a space shipped Jer 10:11 as
-   `כ דנה תאמרון להום אלהי א די שמי א ו ארק א לא עבדו`, and the author caught it
-   on the live page. Append `w["after"]`, never `w["after"] or " "`. The sibling
-   repository never had this; it was copied wrong into this one.
+   into words of their own. Append `w["after"]`; never a space of your own, and
+   never nothing.
+
+   **This shipped twice, in two different renderers, and the author caught both
+   on the live page.** `scroll_html()` forced a space where the divider was
+   empty and printed Jer 10:11 as
+   `כ דנה תאמרון להום אלהי א די שמי א ו ארק א לא עבדו`. Then
+   `space_argument()` did the opposite — it concatenated sign glyphs and dropped
+   the divider altogether, so the anchor quoted on the page read
+   `הבייפהובמקבות` for `הב ייפהו במקבות`. **Any new code that turns scroll signs
+   back into text has to be checked against this**; there are now three such
+   places (`scroll_html`, `unit`, `space_argument`) and the sibling repository's
+   `verse_html` is a fourth.
 2. **A difflib `equal` block must be indexed word for word, and a `replace`
    block is not evidence.** Taking a whole opcode block gave `43:9 אשׁר` as
    restored when it is extant, and `43:10 עבדי` as *carried on extant text* when

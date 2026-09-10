@@ -391,17 +391,23 @@ def space_argument(words, lines):
             if s.get("lost"):
                 continue
             slots.append((wi, s))
+    prev = None
     for i, (wi, s) in enumerate(slots):
         if not s["rec"]:
             if cur is None:
                 cur = {"start": i, "end": i, "text": "", "ch": words[wi]["ch"],
                        "vs": words[wi]["vs"], "line": words[wi]["line"]}
+            elif prev is not None and wi != prev:
+                # the divider, and empty means the scribe wrote the two as one:
+                # תכלת וארגמן, not תכלתוארגמן and not תכלת ו ארגמן
+                cur["text"] += words[prev]["after"]
             cur["end"] = i
             cur["text"] += s["g"]
             cur["vs_end"] = words[wi]["vs"]
         elif cur:
             runs.append(cur)
             cur = None
+        prev = wi
     if cur:
         runs.append(cur)
 

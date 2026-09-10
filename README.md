@@ -33,8 +33,8 @@ so no two of its words stand side by side in the manuscript. Nothing about the
 arrangement of Jeremiah 10 can be read off it directly.
 
 What can be measured is this. What survives falls near the end of each line,
-which fixes where particular words stood. Line 5 ends with `הב ייפהו ב מקבות`, from
-10:4; line 6 ends with `תכלת ו ארגמן`, from 10:9. They are consecutive lines of
+which fixes where particular words stood. Line 5 ends with `הב ייפהו במקבות`, from
+10:4; line 6 ends with `תכלת וארגמן`, from 10:9. They are consecutive lines of
 one fragment, so whatever stood between those two words took up a single line —
 about 96 letters, on this fragment's own average.
 
