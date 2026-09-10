@@ -8,12 +8,12 @@ had in front of him rather than the text of the Masoretic Bible.  This module
 works out what can actually be shown, and separates three things that are
 easy to run together:
 
-    what survives as ink on the leather
-    what a modern editor supplied inside a lacuna
-    what follows from the size of the gap rather than from either
+    what is extant
+    what a modern editor restored within a lacuna
+    what follows from the extent of the lacuna rather than from either
 
 The third is not a weaker kind of evidence, it is a different kind, and for
-4QJer b it is the decisive one: the fragment preserves ink at the end of each
+4QJer b it is the decisive one: the fragment preserves text at the end of each
 line, and the distance between two of those ink runs is one line, while the
 Masoretic text between the same two points needs two and a half.
 
@@ -115,7 +115,7 @@ def read_mt():
 
 
 def read_scroll(sig):
-    """Words in manuscript order, with the line they stand on and what is ink."""
+    """Words in manuscript order, the line they stand on, and what is extant."""
     api = load(DSS_TF, "otype oslots scroll book_etcbc chapter verse glyph type "
                        "rec unc after line fragment lex_etcbc", "DSS")
     F, L = api.F, api.L
@@ -236,7 +236,7 @@ def locate(mt_words, phrase):
 
 
 def verdict(scroll_by_verse, ch, vs, mt_words, phrase):
-    """Does the scroll carry this Masoretic phrase, and is the answer on ink?
+    """Does the manuscript carry this Masoretic phrase, and is it extant there?
 
     Five outcomes.  The two that say `reconstruction` are not findings: they
     are lacunae a modern editor filled, and a filled lacuna cannot disagree
@@ -298,12 +298,12 @@ def mt_run(mt_words, lo, hi):
 
 
 def ink_joins(mt_words, scroll_words):
-    """Where the leather itself says what did not stand in the scroll.
+    """Where the manuscript itself attests what did not stand in it.
 
-    Two words of the scroll that are both ink and stand next to each other are
-    a join: whatever the Masoretic Text has between them was not there.  This
-    is the only kind of omission a scroll can testify to, because an omission
-    inside a lacuna is the editor's and not the scribe's."""
+    Two adjacent words that are both extant are a join: whatever the Masoretic
+    Text has between them did not stand there.  It is the only kind of omission
+    a manuscript can attest, since an omission within a lacuna is the editor's
+    and not the scribe's."""
     sw = evidence(scroll_words)
     if not sw:
         return []
@@ -421,7 +421,7 @@ def collate():
                     "ink": bool(jl and jl["ink"] and jr and jr["ink"]),
                 })
 
-        # what the leather itself excludes, verse by verse
+        # what the extant text excludes, verse by verse
         joins = []
         for (c, vs) in sorted(k for k in mt if k[0] == p["ch"]):
             for jn in ink_joins(mt[(c, vs)], by_verse.get(vs) or []):
@@ -502,7 +502,7 @@ def report(d):
         s = p["space"]
         print(f"  {s['ink']} of {s['slots']} letter slots survive as ink "
               f"({s['ink'] / s['slots']:.0%})")
-        print("  joins on ink -- the Masoretic words the leather excludes:")
+        print("  joins -- the Masoretic words the extant text excludes:")
         for jn in p["joins"]:
             print(f"    {p['ch']}:{jn['vs']:<3d} {jn['left']} | {jn['right']}"
                   f"   MT has [{jn['mt']}]   Old Greek {jn['greek']} it")

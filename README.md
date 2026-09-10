@@ -14,26 +14,26 @@ https://martijnnaaijer.github.io/mt_dss_jeremiah
 
 ## The point of it
 
-Only 10% of 4QJerᵇ and 45% of 4QJerᵈ is ink; the rest of what a transcription
-prints is a modern editor's reconstruction, and a reconstruction supplied from
-the Masoretic Text cannot then be evidence against it. The page keeps three
+Only 10% of 4QJerᵇ and 45% of 4QJerᵈ is extant; the rest of what a
+transcription prints is a modern editor's restoration, and a restoration
+supplied from the Masoretic Text cannot then be evidence against it. The page keeps three
 things apart throughout, and says of every claim which of them it rests on:
 
-- **ink** — letters on the leather
-- **reconstruction** — letters an editor supplied inside a hole
-- **space** — what follows from the size of the hole, and from neither of the above
+- **extant** — letters preserved in the manuscript
+- **restored** — letters an editor supplied within a lacuna
+- **extent** — what follows from the size of the lacuna, and from neither of the above
 
 The two scrolls turn out to carry evidence of two different kinds, and the page
 is built around that rather than around a single claim.
 
-### 4QJerᵇ: the argument is space
+### 4QJerᵇ: the argument is extent
 
-Its surviving ink is 114 letters in 15 runs, none of them touching another, so
-no two of its words stand side by side on the leather. Nothing about the
+Its extant text is 114 letters in 15 discrete runs, none of them contiguous,
+so no two of its words stand side by side in the manuscript. Nothing about the
 arrangement of Jeremiah 10 can be read off it directly.
 
-What can be measured is this. The ink falls near the end of each line, which
-fixes where particular words stood. Line 5 ends with `הב ייפהו ב מקבות`, from
+What can be measured is this. What survives falls near the end of each line,
+which fixes where particular words stood. Line 5 ends with `הב ייפהו ב מקבות`, from
 10:4; line 6 ends with `תכלת ו ארגמן`, from 10:9. They are consecutive lines of
 one fragment, so whatever stood between those two words took up a single line —
 about 96 letters, on this fragment's own average.
@@ -48,11 +48,11 @@ The Masoretic arrangement asks for two and a half lines of writing in the space
 of one. That settles that verses 5 to 8 as the Masoretic Text has them were not
 there. It does not by itself settle the order of what was, and the page says so.
 
-### 4QJerᵈ: the argument is ink
+### 4QJerᵈ: the argument is the extant text
 
-Two words that are both ink and stand side by side are a **join**, and a join
-is testimony: whatever the Masoretic Text has between them was not in this
-copy. It is the only kind of omission a manuscript can witness to. There are
+Two adjacent words that are both extant are a **join**, and a join is
+testimony: whatever the Masoretic Text has between them did not stand in this
+copy. It is the only kind of omission a manuscript can attest. There are
 five such places in Jeremiah 43, and they do not all point the same way.
 
 | | the Masoretic Text has | the scroll | |
@@ -73,7 +73,7 @@ it, and the page reports that rather than rounding it off.
   version 2021.
 - **Judaean Desert manuscripts:** the ETCBC [dss](https://github.com/ETCBC/dss)
   dataset, version 2.0 (Martin Abegg's transcription), in which every sign
-  carries a flag saying whether it is on the leather or supplied.
+  carries a flag saying whether it is extant or restored.
 - **Greek:** Rahlfs 1935, from the
   [LXX](https://github.com/eliranwong/LXX-Rahlfs-1935) dataset. Greek Jeremiah
   runs on its own versification: Greek 50 is Masoretic 43, while in chapter 10

@@ -26,8 +26,8 @@ FONTS = ("https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1
 
 TITLE = "The short edition of Jeremiah at Qumran"
 DESC = ("Two Jeremiah scrolls from Cave 4 carry the shorter text behind the "
-        "Greek, not the text of the Masoretic Bible. What the leather shows, "
-        "what an editor supplied, and what follows from the size of the gap.")
+        "Greek, not the text of the Masoretic Bible. What the manuscripts attest, "
+        "what an editor restored, and what follows from the extent of the lacuna.")
 
 
 def esc(s):
@@ -200,12 +200,12 @@ def space_section(d):
 <section id="space"><div class="wrap">
 <h2>The Masoretic chapter is too long for the fragment</h2>
 <p class="lede">Only {s['ink']} of the {s['slots']} letter-places of this fragment
-survive as ink, about {s['ink'] / s['slots']:.0%} of it, and the ink falls near the
-end of each line. That is little to read, but it is enough to measure: it fixes
+are extant, about {s['ink'] / s['slots']:.0%} of it, and what survives falls near
+the end of each line. That is little to read, but enough to measure: it fixes
 where particular words stood, and the lines between them have a known width.</p>
 <div class="frag">{''.join(rows)}
   <p class="absent">Each bar is one line of the fragment, drawn to its length;
-  the dark marks are the surviving ink. The two outlined lines are {a_line} and
+  the dark marks are the extant text. The two outlined lines are {a_line} and
   {b_line}.</p>
 </div>
 <h3>One line, and two texts asking to go into it</h3>
@@ -225,15 +225,15 @@ those two words occupied a single line.</p>
 <p>The Masoretic arrangement asks for two and a half lines of writing in the
 space of one. It will not go in. That is the argument the editors make for this
 scroll, and it does not depend on a single reconstructed letter: it depends on
-where the ink is and how wide the lines are.</p>
+where the extant text stands and how wide the lines are.</p>
 <div class="note">
   <h3>What this does not show</h3>
   <p>It shows that <b>10:5&ndash;8 as the Masoretic Text has them were not
   there</b>. It does not by itself show that verse 9 stood before verse 5, or
   that verse 10 was missing: the fragment has room for the shorter text in
   several arrangements, and the one printed above is the editor's, chosen
-  because the Greek has exactly that order. Between the ink of 10:9 and the ink
-  of 10:11 the sums do not decide anything &mdash; the Masoretic text with verse
+  because the Greek has exactly that order. Between the extant text of 10:9
+  and that of 10:11 the sums do not decide anything &mdash; the Masoretic text with verse
   10 and the scroll's text with the second half of verse 5 come to nearly the
   same length.</p>
 </div>
@@ -277,20 +277,20 @@ def joins_section(d):
     <span class="verdict mt">with the Masoretic Text</span>
     <span class="ref">{p['name']}</span></div>
   <p class="heb"><span class="keep">{esc(t.get('text') or t['phrase'])}</span></p>
-  <p class="gl">This word is on the leather and the Greek has nothing answering
-  to it, so here the scroll goes with the Masoretic Text.</p>
+  <p class="gl">This word is extant, and the Greek has nothing answering to
+  it, so here the manuscript agrees with the Masoretic Text.</p>
 </div>""")
 
     b = d["passages"][0]
     return f"""
 <section id="ink"><div class="wrap">
-<h2>What the leather itself says</h2>
-<p class="lede">Two words of a scroll that are both ink and stand side by side
-are a join, and a join is testimony: whatever the Masoretic Text has between
-them was not in this copy. It is the only kind of omission a manuscript can
-witness to, because an omission inside a hole is the modern editor's and not
-the scribe's. Below, the words in blue are the ink, and the words in ochre are
-what the Masoretic Text puts between them.</p>
+<h2>What the manuscript reads</h2>
+<p class="lede">Two adjacent words that are both extant are a join, and a join
+is testimony: whatever the Masoretic Text has between them did not stand in
+this copy. It is the only kind of omission a manuscript can attest, since an
+omission within a lacuna is the modern editor's and not the scribe's. Below,
+the words in blue are extant; the words in ochre are what the Masoretic Text
+sets between them.</p>
 <div class="joins">{''.join(rows)}</div>
 <p>Three of the five go with the Greek, one with the Masoretic Text, and one
 with neither. That is the texture of the thing: {b['name']}'s neighbour
@@ -298,11 +298,11 @@ with neither. That is the texture of the thing: {b['name']}'s neighbour
 a copy of it.</p>
 <div class="note">
   <h3>4QJer<sup>b</sup> has no such join at all</h3>
-  <p>Its surviving ink is {b['space']['ink']} letters in
-  {len(b['space']['runs'])} separate runs, and no two of its words are adjacent
-  on the leather. Everything above about Jeremiah 10 rests on the size of the
-  gaps and nothing on two words standing next to each other. The two scrolls
-  are evidence of different kinds, and they are worth keeping apart.</p>
+  <p>Its extant text is {b['space']['ink']} letters in
+  {len(b['space']['runs'])} discrete runs, and no two of its words are adjacent
+  in the manuscript. Everything above about Jeremiah 10 rests on the extent of
+  the lacunae and nothing on two words standing next to each other. The two
+  manuscripts are evidence of different kinds, and worth keeping apart.</p>
 </div>
 </div></section>
 """
@@ -351,9 +351,9 @@ def collation_section(d):
 <h2>The passages in full</h2>
 <p class="lede">The Masoretic verse, the scroll beneath it, and Rahlfs's Greek
 beneath that. In the Masoretic line, ochre marks a word the scroll does not
-carry; a tinted ochre marks one the leather excludes rather than the editor. In
-the scroll line, grey letters in brackets are the editor's reconstruction, a
-dot above a letter means the reading is uncertain, and
+carry; a tinted ochre marks one the extant text excludes rather than the
+editor. In the manuscript line, grey letters in brackets are the editor's
+restoration, a dot above a letter marks an uncertain reading, and
 <span class="traces">&deg;</span> is a letter surviving only as traces.</p>
 {''.join(blocks)}
 </div></section>
@@ -383,10 +383,10 @@ def build():
   from the Judaean Desert, four go with the Masoretic Text. <b>Two do not.</b></p>
   <p class="standfirst">This page sets those two, {b['name']} and {dd['name']},
   against the Masoretic Text and the Greek, and keeps three things apart
-  throughout: what survives as ink, what a modern editor supplied inside a
-  hole, and what follows from the size of the hole. Only
-  {b['space']['ink'] / b['space']['slots']:.0%} of the first scroll and
-  {dd['space']['ink'] / dd['space']['slots']:.0%} of the second is ink.</p>
+  throughout: what is extant, what a modern editor restored within a lacuna,
+  and what follows from the extent of the lacuna. Only
+  {b['space']['ink'] / b['space']['slots']:.0%} of the first manuscript and
+  {dd['space']['ink'] / dd['space']['slots']:.0%} of the second is extant.</p>
 </div></header>
 <main>
 {order_section(d)}
@@ -398,8 +398,8 @@ def build():
 <p>The Masoretic Text is the ETCBC <a href="https://github.com/ETCBC/bhsa">BHSA</a>
 database. The scrolls are the ETCBC <a href="https://github.com/ETCBC/dss">dss</a>
 dataset, Martin Abegg's transcription, in which every sign carries a flag saying
-whether it is on the leather or supplied; nothing on this page treats a supplied
-sign as a witness. The Greek is Rahlfs, from the
+whether it is extant or restored; nothing on this page treats a restored sign
+as a witness. The Greek is Rahlfs, from the
 <a href="https://github.com/eliranwong/LXX-Rahlfs-1935">LXX</a> dataset. Greek
 Jeremiah runs on its own versification: Greek 50 is Masoretic 43, while in
 chapter 10 the numbers agree and it is the verses themselves that differ.</p>
