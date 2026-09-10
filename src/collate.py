@@ -67,6 +67,7 @@ PASSAGES = [
 ]
 
 SIGLA = ("4Q71", "4Q72a")          # the two manuscripts this study is about
+SIGLA_MT = ("4Q70", "4Q72", "4Q72b", "2Q13")   # the four that go with the MT
 CONS_SIGNS = {"cons", "numr", "foreign", "punct", "add"}
 POINTS = re.compile("[֑-ֽֿ׀׃-ׇ]")
 SIN_SHIN = re.compile("[ׁׂ]")
@@ -78,7 +79,13 @@ def bare(s: str) -> str:
     return SIN_SHIN.sub("", POINTS.sub("", s or "")).replace(MAQQEF, "").replace(" ", "")
 
 
+_LOADED = {}
+
+
 def load(location, features, what):
+    """Load a corpus once per process: the control reads six manuscripts."""
+    if (location, features) in _LOADED:
+        return _LOADED[(location, features)]
     path = Path(location).expanduser()
     if not path.is_dir():
         sys.exit(f"{what} not found at {path}\n"
@@ -87,13 +94,14 @@ def load(location, features, what):
     api = Fabric(locations=str(path), silent="deep").load(features, silent="deep")
     if api is False:
         sys.exit(f"could not load {what} from {path} (missing features?)")
+    _LOADED[(location, features)] = api
     return api
 
 
 # ---------------------------------------------------------------------------
 # The three witnesses
 # ---------------------------------------------------------------------------
-def read_mt():
+def read_mt(chapters=(9, 10, 43)):
     api = load(BHSA_TF, "otype oslots book chapter verse g_word_utf8 g_cons_utf8 "
                         "trailer_utf8 lex gloss voc_lex_utf8", "BHSA")
     F, L, T = api.F, api.L, api.T
@@ -103,7 +111,7 @@ def read_mt():
         if bk != "Jeremiah":
             continue
         c, vs = int(c), int(vs)
-        if c not in (9, 10, 43):
+        if chapters and c not in chapters:
             continue
         out[(c, vs)] = [
             {"pointed": F.g_word_utf8.v(w) or "",
@@ -181,7 +189,7 @@ def read_greek(chapters):
     return out, order
 
 
-def read_stipp(chapters):
+def read_stipp(chapters=None):
     """Three things from the Synopse, and a fourth is deliberately not taken.
 
     Taken: the Masoretic words Stipp brackets as absent from the Old Greek;
@@ -199,7 +207,7 @@ def read_stipp(chapters):
     recs = json.loads(path.read_text(encoding="utf-8"))
     out, cola, notes = {}, {}, {}
     for r in recs:
-        if r["book"] != "Jeremiah" or r["ch"] not in chapters:
+        if r["book"] != "Jeremiah" or (chapters and r["ch"] not in chapters):
             continue
         key = (r["ch"], r["v"])
         cola.setdefault(key, []).append(r)
@@ -354,8 +362,17 @@ def ink_joins(mt_words, scroll_words):
         if not gap:
             continue
         left, right = unit(sw, j, back=True), unit(sw, j + 1, back=False)
-        joins.append({"left": "".join(w["cons"] for w in left),
-                      "right": "".join(w["cons"] for w in right),
+        lt = "".join(w["cons"] for w in left)
+        rt = "".join(w["cons"] for w in right)
+        # A single letter is not an anchor.  The ETCBC writes a prefixed
+        # particle as a word, and difflib will match a lone bet anywhere: at
+        # 4Q70 14,4 it paired the bet of the manuscript's בארץ with the bet of
+        # the Masoretic בעבור ten words earlier, and reported the ten words
+        # between as excluded.  Both anchors and the gap must be two letters.
+        if min(len(bare(lt)), len(bare(rt)), len(bare(gap))) < 2:
+            continue
+        joins.append({"left": lt,
+                      "right": rt,
                       "left_words": left, "right_words": right,
                       "mt": gap,
                       "gloss": " ".join(mt_words[i]["gloss"] for i in range(lo, hi)).strip()})

@@ -8,6 +8,8 @@ be rebuilt from the corpora.
 CLAUDE.md              this file
 src/collate.py         the measurement. Writes no HTML. `python src/collate.py`
                        prints the findings as text
+src/control.py         the null: the same two functions run over the whole book
+                       on the four Masoretic-type manuscripts. Needs synopse.json
 src/build.py           turns those findings into docs/index.html
 src/assets/site.css    copied to docs/assets/ on every build
 docs/                  what GitHub Pages serves: index.html + assets/site.css
@@ -39,6 +41,15 @@ dishonest.** That is the finding the page is built around.
 | lines / ink runs | 13 / 15 | 9 / 24 |
 | **joins** (two adjacent extant words) | **0** | **4** |
 | the argument is | extent | the extant text |
+
+**The control passes** (`src/control.py`, run over all 52 chapters). Of the
+bracketed Masoretic pluses each manuscript can answer for on extant text,
+4QJerᵈ omits **3 of 4**; the four Masoretic-type manuscripts — 4Q70, 4Q72,
+4Q72b, 2Q13 — omit **0 of 42**. Fisher exact **p = 0.00026**. In the whole book
+those four produce **one** join between them, 4QJerᶜ at 21:7 omitting
+ומן־הרעב, which Stipp does not bracket: their own accident, not an agreement
+with the Greek. **The test does find omissions there; it never finds one over a
+Masoretic plus.** That is what makes this a null and not silence.
 
 ## The one rule
 
@@ -136,7 +147,15 @@ That is why the two chapters are handled by different mappings in `PASSAGES`.
    `[ו]י̇באו̇`, where only יבאו is extant. Do not let a colour claim more than
    the data.
 7. **Stipp's Greek panel cannot be read across a transposition.** See below.
-8. **The Pages workflow fails on the first push**, at `actions/configure-pages`,
+8. **A single letter is not an anchor.** The ETCBC writes a prefixed particle as
+   a word, and difflib will match a lone bet anywhere: at 4Q70 14:4 it paired the
+   bet of the manuscript's בארץ with the bet of the Masoretic בעבור ten words
+   earlier and reported the ten words between as excluded. `ink_joins()` now
+   requires both anchors **and** the gap to be two letters or more. It removed
+   three of the four joins the Masoretic-type manuscripts had and none of
+   4QJerᵈ's, so it narrows the claim rather than widening it. Found by running
+   the control, not by reading the page.
+9. **The Pages workflow fails on the first push**, at `actions/configure-pages`,
    because Pages is not yet enabled. Enable it (`build_type: workflow`), then
    re-run. Not a fault in the workflow.
 
@@ -198,14 +217,13 @@ renamed; `--leather`, `ink`, `ink_joins` and `carries-ink` survive on purpose.
   better than 10:10 does. The two lengths are within a few letters, which is why
   the page declines to decide; a proper test would need the column width from
   DJD XV rather than the fragment's own mean.
-- **The control has not been run, and it is the obvious next thing.** The
-  other four Jeremiah manuscripts are not on the page at all, and they are the
-  null this instrument needs: if `ink_joins()` is measuring anything, they
-  should carry the Masoretic pluses where 4QJerᵈ omits them. There is ample
-  material for it — 4Q70 has 576 adjacent extant pairs and is 33% extant, 4Q72
-  has 421 at 33%, 2Q13 has 122 at 25%, and even 4Q72b has 16 at 33%. Guessing
-  that 4Q72b was too fragmentary to bother with was wrong, and measured in one
-  command.
+- **Done 2026-09-10: the control, `src/control.py`.** See the table above. Two
+  things to keep in mind about it. The short-edition side rests on **4 decidable
+  cases**, all of them in 4QJerᵈ — 4QJerᵇ contributes none, having no join in
+  the book — so the p value is carried by a very small numerator against a large
+  clean denominator. And "decidable" counts only a plus with extant text on both
+  sides: 42 of several hundred. The four are more extant in absolute terms, but
+  most of the pluses in the verses they reach fall in lacunae.
 - The apparatus notes are read but only counted. Parsing them properly would
   need `parse_synopse.py` to keep a margin note whole, which is a change in the
   parent project and not here.

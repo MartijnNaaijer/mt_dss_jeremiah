@@ -67,6 +67,32 @@ Three of the five go with the Greek, one with the Masoretic Text, and one with
 neither. 4QJerᵈ is close to the text behind the Greek without being a copy of
 it, and the page reports that rather than rounding it off.
 
+### The control
+
+Three omissions in one manuscript is three data points. The other four Jeremiah
+manuscripts from the Judaean Desert are of the Masoretic type, so they are the
+null: if the join test reads the shape of a text rather than the shape of the
+damage, they should *carry* the pluses that 4QJerᵈ omits. `src/control.py` runs
+the same two functions over all 52 chapters.
+
+| | decidable pluses | carries | omits |
+| --- | ---: | ---: | ---: |
+| 4QJerᵈ (4Q72a) | 4 | 1 | **3** |
+| 4QJerᵇ (4Q71) | 0 | 0 | 0 |
+| 4QJerᶜ (4Q72) | 21 | 21 | 0 |
+| 4QJerᵃ (4Q70) | 17 | 17 | 0 |
+| 2QJer (2Q13) | 3 | 3 | 0 |
+| 4QJerᵉ (4Q72b) | 1 | 1 | 0 |
+
+Not one of the 42 bracketed pluses the Masoretic-type four could answer for is
+missing from them, against 3 of 4 in the short-edition pair. Fisher's exact test
+gives **p = 0.00026**.
+
+It is a null and not silence: in the whole book those four produce **one** join,
+4QJerᶜ at 21:7, omitting ומן־הרעב — which Stipp does not bracket, so the Greek
+has it. Their own accident, most likely an eye slipping from one מן to the next.
+The test does find omissions there. It never finds one over a Masoretic plus.
+
 ## Sources & credits
 
 - **Masoretic Text:** the ETCBC [BHSA](https://github.com/ETCBC/bhsa) dataset,
@@ -117,7 +143,8 @@ git clone --depth 1 https://github.com/ETCBC/dss.git
 git clone --depth 1 https://github.com/ETCBC/bhsa.git
 
 python src/collate.py          # the evidence, as text
-python src/build.py            # the evidence, as the page
+python src/control.py          # the null, as text
+python src/build.py            # both, as the page
 ```
 
 `BHSA_TF`, `DSS_TF` and `LXX_TF` override the corpus locations, which default

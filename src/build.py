@@ -15,6 +15,7 @@ import shutil
 from pathlib import Path
 
 import collate as C
+import control as X
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE.parent / "docs"
@@ -319,6 +320,85 @@ a copy of it.</p>
 """
 
 
+def control_section():
+    rows = X.run()
+    short = [r for r in rows if r["short"]]
+    mtt = [r for r in rows if not r["short"]]
+    so, sd = sum(r["omits"] for r in short), sum(r["decidable"] for r in short)
+    mo, md = sum(r["omits"] for r in mtt), sum(r["decidable"] for r in mtt)
+    p = X.fisher(so, sd - so, mo, md - mo)
+
+    trs = []
+    for r in sorted(rows, key=lambda r: (not r["short"], -r["decidable"])):
+        cls = " class=\"short\"" if r["short"] else ""
+        rate = f"{r['rate']:.0%}" if r["rate"] is not None else "&mdash;"
+        trs.append(
+            f"<tr{cls}><th>{r['name']}<span>{r['sig']}</span></th>"
+            f"<td>{r['extant'] / r['slots']:.0%}</td><td>{r['verses']}</td>"
+            f"<td>{r['decidable']}</td><td>{r['carries']}</td>"
+            f"<td>{r['omits']}</td><td>{rate}</td></tr>")
+
+    others = [j for r in mtt for j in r["join_list"]]
+    other = others[0] if others else None
+    onote = ""
+    if other:
+        who = next(r["name"] for r in mtt if other in r["join_list"])
+        onote = (f"In the whole book they produce <b>one</b> join between them, "
+                 f"{who} at {other['ch']}:{other['vs']}, where the manuscript sets "
+                 f"<span dir=\"rtl\" lang=\"he\">{esc(other['left'])}</span> against "
+                 f"<span dir=\"rtl\" lang=\"he\">{esc(other['right'])}</span> and the "
+                 f"Masoretic Text has "
+                 f"<span dir=\"rtl\" lang=\"he\">{esc(other['mt'])}</span> between "
+                 f"them. Stipp does not bracket it, so the Greek has it too: it is "
+                 f"this manuscript\u2019s own omission, most likely an eye slipping "
+                 f"from one <span dir=\"rtl\" lang=\"he\">\u05de\u05df</span> to the "
+                 f"next. The test does find omissions here. It never finds one over "
+                 f"a Masoretic plus.")
+
+    return f"""
+<section id="control"><div class="wrap">
+<h2>The same test where it ought to find nothing</h2>
+<p class="lede">Three omissions in one manuscript is three data points, and no
+way to tell a finding from a habit of the method. The other four Jeremiah
+manuscripts from the Judaean Desert are of the Masoretic type, so they are the
+null: if the join test is reading the shape of a text rather than the shape of
+the damage, they should <em>carry</em> the bracketed pluses that 4QJer<sup>d</sup>
+omits.</p>
+<table class="control">
+  <thead><tr><th>manuscript</th><th>extant</th><th>verses</th>
+    <th>decidable pluses</th><th>carries</th><th>omits</th><th>omitted</th></tr></thead>
+  <tbody>{''.join(trs)}</tbody>
+</table>
+<p class="foot">A plus inside a lacuna is not evidence either way, so the
+denominator is the pluses a manuscript can actually answer for.</p>
+<div class="scales">
+  <div class="scale need"><div class="lbl">The short-edition pair<span>4QJer<sup>b</sup>, 4QJer<sup>d</sup></span></div>
+    <div class="meter"><i style="width:{so / sd * 100 if sd else 0:.0f}%"></i></div>
+    <div class="num">{so} of {sd} omitted</div></div>
+  <div class="scale have"><div class="lbl">The Masoretic-type four<span>4QJer<sup>a</sup>, 4QJer<sup>c</sup>, 4QJer<sup>e</sup>, 2QJer</span></div>
+    <div class="meter"><i style="width:{mo / md * 100 if md else 0:.0f}%"></i></div>
+    <div class="num">{mo} of {md} omitted</div></div>
+</div>
+<p>Not one of the {md} bracketed pluses these four could answer for is missing
+from them, against {so} of {sd} in the pair. Fisher's exact test gives
+<b>p&nbsp;=&nbsp;{p:.2g}</b>. The instrument is reading the edition.</p>
+<div class="note">
+  <h3>Why this is a null and not silence</h3>
+  <p>{onote}</p>
+  <p><b>One rule had to be added to get here.</b> A single letter is not an
+  anchor: the ETCBC writes a prefixed particle as a word of its own, and at
+  4QJer<sup>a</sup> 14:4 the alignment paired the bet of the manuscript&#8217;s
+  <span dir="rtl" lang="he">בארץ</span> with the bet of the Masoretic
+  <span dir="rtl" lang="he">בעבור</span> ten words earlier, then reported the ten
+  words between as excluded. Both anchors and the gap must now be two letters or
+  more. It removes three of the four joins the Masoretic-type manuscripts had and
+  none of 4QJer<sup>d</sup>&#8217;s, so it makes the contrast above narrower to
+  claim, not wider.</p>
+</div>
+</div></section>
+"""
+
+
 def collation_section(d):
     blocks = []
     for p in d["passages"]:
@@ -408,6 +488,7 @@ def build():
 {order_section(d)}
 {space_section(d)}
 {joins_section(d)}
+{control_section()}
 {collation_section(d)}
 <section id="method"><div class="wrap">
 <h2>How this was measured</h2>
