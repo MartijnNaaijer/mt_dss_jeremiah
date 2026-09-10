@@ -170,7 +170,7 @@ That is why the two chapters are handled by different mappings in `PASSAGES`.
 
 ## Stipp's Synopse: what it can carry, and what it cannot
 
-**Not the Greek.** The panel is aligned colon by colon and would be the natural
+**Not the Greek.** The panel is aligned sentence by sentence and would be the natural
 text to set. Checked against Rahlfs verse by verse over both passages it agrees
 on **32 of 34**. The exceptions are **10:5 and 10:9, which carry each other's
 Greek** — 0.29 against their own verse, 0.99 against the other's. That is
@@ -200,6 +200,15 @@ note, and fault (17) of the parent project shows what happens when a `>` is read
 out of such a span. Nothing on the page rests on a note's wording.
 
 ## Vocabulary
+
+**Stipp's lettered segments are SENTENCES.** Not *cola* and not *clauses*: the
+author's instruction, and his reason is a fact about Hebrew versification rather
+than a preference — a colon is part of a stichus, a verse line built of two or
+three of them, and Hebrew prose has no stichometry, so it has no cola. The
+parent project's `CLAUDE.md` carries the same rule for the Synopse pages. The
+term reached this page as *colon by colon*, was corrected to *clause* on a
+literal reading of the correction, and settled as *sentence* on the author's
+confirmation.
 
 **Reader-facing prose is text criticism, not archaeology.** Write **extant**,
 **restored** / **restoration**, **lacuna**, **the manuscript**. Do **not** write

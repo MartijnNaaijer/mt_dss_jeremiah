@@ -205,12 +205,12 @@ def read_stipp(chapters=None):
               f"agreement table is left empty", file=sys.stderr)
         return {}, [], {}, {}
     recs = json.loads(path.read_text(encoding="utf-8"))
-    out, cola, notes = {}, {}, {}
+    out, sentences, notes = {}, {}, {}
     for r in recs:
         if r["book"] != "Jeremiah" or (chapters and r["ch"] not in chapters):
             continue
         key = (r["ch"], r["v"])
-        cola.setdefault(key, []).append(r)
+        sentences.setdefault(key, []).append(r)
         for seg in r["mt"]:
             if seg["cls"] == "plus":
                 txt = POINTS.sub("", seg["text"]).replace(MAQQEF, " ").strip()
@@ -225,13 +225,13 @@ def read_stipp(chapters=None):
 
     # a verse Stipp gives no alexandrian column at all: his own statement that
     # the Old Greek has nothing answering to it
-    empty = sorted(k for k, rs in cola.items()
+    empty = sorted(k for k, rs in sentences.items()
                    if any(r["mt"] for r in rs)
                    and all(not r["og"] for r in rs)
                    and all(seg["cls"] == "plus" for r in rs for seg in r["mt"]))
 
     greek = {}
-    for k, rs in cola.items():
+    for k, rs in sentences.items():
         g = " ".join(r["greek"] for r in rs if r["greek"]).strip()
         if g:
             greek[k] = g

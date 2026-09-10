@@ -505,8 +505,8 @@ follows Hermann-Josef Stipp, <i>Textkritische Synopse zum Jeremiabuch</i>, 15.
 korrigierte interne Auflage (2021), as parsed in the companion study. Every
 reading it is relied on for here was checked against Rahlfs directly.</p>
 <h3>Why the Greek is Rahlfs and not the Synopse's own panel</h3>
-<p>The Synopse prints the Greek beside the Hebrew colon by colon, which is a
-finer alignment than the verse-level one used here, and it would be the natural
+<p>The Synopse prints the Greek beside the Hebrew sentence by sentence, which
+is a finer alignment than the verse-level one used here, and it would be the natural
 text to set. Checked against Rahlfs verse by verse over both passages, it agrees
 on {gc_ok} of {gc_n}. The exceptions are <b>10:5 and 10:9</b>, and they fail in
 one particular way: each carries the other's Greek. Stipp's panel for 10:5 is

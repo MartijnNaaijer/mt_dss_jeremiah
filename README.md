@@ -105,7 +105,7 @@ The test does find omissions there. It never finds one over a Masoretic plus.
   runs on its own versification: Greek 50 is Masoretic 43, while in chapter 10
   the numbers agree and it is the verses themselves that differ.
 
-  Not the Synopse's own Greek panel, though it is aligned colon by colon and
+  Not the Synopse's own Greek panel, though it is aligned sentence by sentence and
   would be the natural text to set. Checked against Rahlfs verse by verse over
   both passages it agrees on 32 of 34; the two exceptions are 10:5 and 10:9,
   which carry each other's Greek. That is where the two editions are
