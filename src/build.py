@@ -101,6 +101,12 @@ def absent_map(mt_words, scroll_words):
 # ---------------------------------------------------------------------------
 def order_section(d):
     order = d["order"]
+    empty = [r.split(":")[1] for r in d.get("stipp_empty", []) if r.startswith("10:")]
+    empty_list = (", ".join(empty[:-1]) + " and " + empty[-1]) if len(empty) > 1 else \
+        (empty[0] if empty else "")
+    app = sorted({n["v"] for n in d.get("stipp_notes", {}).get("4Q71", [])
+                  if n["v"] in (6, 10)})
+    app_list = " and ".join(f"10:{v}" for v in app) or "no verse here"
     mt_v = [v for v in order["mt"] if v <= 12]
     greek = [v for v in order["greek"] if v <= 12]
 
@@ -149,6 +155,11 @@ does the same, and splits verse 5 around it.</p>
 <p>The arrangement in the middle row is an editor's, and the section below is
 about whether it can be believed. The two outer rows are not: they are what the
 Masoretic Text and Rahlfs's Greek actually print.</p>
+<p><b>Two editors say the same thing about verses {empty_list} independently.</b>
+Rahlfs simply has no such verses. Stipp, setting the two editions side by side
+in columns, leaves the alexandrian column of all four of them empty, which is
+his statement that the Old Greek has nothing answering to them at all. And his
+apparatus names 4Q71 at {app_list} &mdash; he read this manuscript here too.</p>
 </div></section>
 """
 
@@ -363,6 +374,11 @@ restoration, a dot above a letter marks an uncertain reading, and
 def build():
     d = C.collate()
     b, dd = d["passages"]
+    gc = d.get("greek_check") or {"ok": 0, "n": 0, "rows": []}
+    gc_ok, gc_n = gc["ok"], gc["n"]
+    row59 = next((r for r in gc["rows"] if r["ref"] == "10:5"), None)
+    sim59 = row59["sim"] if row59 else 0
+    best59 = row59["best_sim"] if row59 else 0
 
     page = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
@@ -407,6 +423,25 @@ chapter 10 the numbers agree and it is the verses themselves that differ.</p>
 follows Hermann-Josef Stipp, <i>Textkritische Synopse zum Jeremiabuch</i>, 15.
 korrigierte interne Auflage (2021), as parsed in the companion study. Every
 reading it is relied on for here was checked against Rahlfs directly.</p>
+<h3>Why the Greek is Rahlfs and not the Synopse's own panel</h3>
+<p>The Synopse prints the Greek beside the Hebrew colon by colon, which is a
+finer alignment than the verse-level one used here, and it would be the natural
+text to set. Checked against Rahlfs verse by verse over both passages, it agrees
+on {gc_ok} of {gc_n}. The exceptions are <b>10:5 and 10:9</b>, and they fail in
+one particular way: each carries the other's Greek. Stipp's panel for 10:5 is
+{sim59:.0%} similar to Rahlfs at 10:5 and {best59:.0%} similar to Rahlfs at
+10:9, and the panel for 10:9 is the mirror of that.</p>
+<p>That is where the two editions are transposed, and it is the fault of reading
+the panel rather than of the edition: Stipp marks the transposition himself,
+with his star and a margin cross-reference. But a Greek panel laid out against a
+Hebrew column running in Masoretic order cannot show the Greek's own order, and
+the Greek's own order is what the first section of this page is about. Rahlfs
+read as a text keeps it. So the Greek here is Rahlfs, and the Synopse is used
+for what only it can give: which Masoretic words the Old Greek lacks.</p>
+<p>One caution about the apparatus citations quoted above. The parse takes
+Stipp's margin apart into spans, so the manuscript siglum and the place it
+stands at are reliable, while the wording around them is not necessarily whole.
+Nothing on this page rests on the wording of a marginal note.</p>
 <p>The measurement is in <code>src/collate.py</code> and the page in
 <code>src/build.py</code>. No figure or reading on this page is typed in by
 hand; all of them are computed and can be reproduced by running those two.</p>
@@ -414,7 +449,7 @@ hand; all of them are computed and can be reproduced by running those two.</p>
 </main>
 <footer><div class="wrap">
 <p>Masoretic Text: ETCBC BHSA 2021. Judaean Desert manuscripts: ETCBC dss 2.0.
-Greek: Rahlfs 1935. Reconstruction and legibility are marked as the dss dataset
+Greek: Rahlfs 1935. Restoration and legibility are marked as the dss dataset
 encodes them.</p>
 <p>Companion edition, the whole Hebrew Bible verse by verse against the
 manuscripts:

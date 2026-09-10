@@ -78,10 +78,26 @@ it, and the page reports that rather than rounding it off.
   [LXX](https://github.com/eliranwong/LXX-Rahlfs-1935) dataset. Greek Jeremiah
   runs on its own versification: Greek 50 is Masoretic 43, while in chapter 10
   the numbers agree and it is the verses themselves that differ.
+
+  Not the Synopse's own Greek panel, though it is aligned colon by colon and
+  would be the natural text to set. Checked against Rahlfs verse by verse over
+  both passages it agrees on 32 of 34; the two exceptions are 10:5 and 10:9,
+  which carry each other's Greek. That is where the two editions are
+  transposed, and it is the fault of reading the panel rather than of the
+  edition — Stipp marks the transposition with his star and a margin
+  reference. But a Greek panel laid out against a Hebrew column in Masoretic
+  order cannot show the Greek's own order, and that order is what the first
+  section of the page is about.
 - For **which Masoretic words are absent from the Greek**, the page follows
   Hermann-Josef Stipp, *Textkritische Synopse zum Jeremiabuch*, 15. korrigierte
   interne Auflage (2021), as parsed in the companion study. Every reading it is
-  relied on for was checked against Rahlfs directly.
+  relied on for was checked against Rahlfs directly. Two further things come
+  from it: the four verses of Jeremiah 10 whose alexandrian column Stipp leaves
+  empty altogether (6, 7, 8, 10), which is his own statement that the Old Greek
+  has nothing answering to them; and the places where his apparatus names 4Q71,
+  among them 10:6 and 10:10. The parse takes his margin apart into spans, so
+  the siglum and the place are reliable while the wording around them may not
+  be whole, and nothing rests on the wording of a marginal note.
 - All three corpora are read with [Context-Fabric](https://context-fabric.ai),
   the successor to [Text-Fabric](https://github.com/annotation/text-fabric).
 

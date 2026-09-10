@@ -66,6 +66,7 @@ PASSAGES = [
      "greek_ch": 50},
 ]
 
+SIGLA = ("4Q71", "4Q72a")          # the two manuscripts this study is about
 CONS_SIGNS = {"cons", "numr", "foreign", "punct", "add"}
 POINTS = re.compile("[֑-ֽֿ׀׃-ׇ]")
 SIN_SHIN = re.compile("[ׁׂ]")
@@ -181,25 +182,52 @@ def read_greek(chapters):
 
 
 def read_stipp(chapters):
-    """Which Masoretic words Stipp brackets as absent from the Old Greek."""
+    """Three things from the Synopse, and a fourth is deliberately not taken.
+
+    Taken: the Masoretic words Stipp brackets as absent from the Old Greek;
+    the verses whose alexandrian column he leaves empty altogether; and the
+    apparatus notes in which he cites a Judaean Desert manuscript by siglum.
+
+    Not taken: his Greek panel.  See `greek_check` below."""
     path = Path(SYNOPSE)
     if not path.is_absolute():
         path = (REPO.parent.parent / path).resolve()
     if not path.is_file():
         print(f"  note: {path} not found, so the Old Greek column of the "
               f"agreement table is left empty", file=sys.stderr)
-        return {}
+        return {}, [], {}, {}
     recs = json.loads(path.read_text(encoding="utf-8"))
-    out = {}
+    out, cola, notes = {}, {}, {}
     for r in recs:
         if r["book"] != "Jeremiah" or r["ch"] not in chapters:
             continue
+        key = (r["ch"], r["v"])
+        cola.setdefault(key, []).append(r)
         for seg in r["mt"]:
             if seg["cls"] == "plus":
                 txt = POINTS.sub("", seg["text"]).replace(MAQQEF, " ").strip()
                 if txt:
-                    out.setdefault((r["ch"], r["v"]), []).append(txt)
-    return out
+                    out.setdefault(key, []).append(txt)
+        for n in r.get("notes") or []:
+            for sig in SIGLA:
+                if sig in (n.get("text") or ""):
+                    notes.setdefault(sig, []).append(
+                        {"ch": r["ch"], "v": r["v"], "clause": r["clause"],
+                         "kind": n["kind"], "text": n["text"].strip()})
+
+    # a verse Stipp gives no alexandrian column at all: his own statement that
+    # the Old Greek has nothing answering to it
+    empty = sorted(k for k, rs in cola.items()
+                   if any(r["mt"] for r in rs)
+                   and all(not r["og"] for r in rs)
+                   and all(seg["cls"] == "plus" for r in rs for seg in r["mt"]))
+
+    greek = {}
+    for k, rs in cola.items():
+        g = " ".join(r["greek"] for r in rs if r["greek"]).strip()
+        if g:
+            greek[k] = g
+    return out, empty, greek, notes
 
 
 # ---------------------------------------------------------------------------
@@ -384,11 +412,56 @@ def gap_measure(mt, runs, a_ch, a_vs, a_tail, b_ch, b_vs, b_head, between):
             "between": {v: len(verse_cons(a_ch, v)) for v in between}}
 
 
+def greek_check(stipp_greek, rahlfs):
+    """Stipp's Greek panel against Rahlfs, verse by verse.
+
+    The panel is not used to set the Greek on the page, and this is why.  In
+    Jeremiah 43 it agrees with Rahlfs throughout.  In Jeremiah 10 it does not,
+    and it fails in one specific way: the Greek of 10:5 and of 10:9 come out
+    against each other's Hebrew.  That is where the two editions are
+    transposed, and a Greek panel laid out against a Hebrew column in Masoretic
+    order has nowhere else to put them.  Stipp marks the transposition himself,
+    with his star and a margin reference, so the fault is in reading the panel
+    and not in the edition -- but it falls on the two verses this study turns
+    on, so Rahlfs is used instead, where the Greek keeps its own order."""
+    rows = []
+    for (ch, gch) in ((10, 10), (43, 50)):
+        for (c, v) in sorted(k for k in stipp_greek if k[0] == ch):
+            st = stipp_greek[(c, v)]
+            here = _sim(st, rahlfs.get((gch, v), ""))
+            best = max(((_sim(st, t), k[1]) for k, t in rahlfs.items() if k[0] == gch),
+                       default=(0.0, None))
+            rows.append({"ref": f"{c}:{v}", "greek_ref": f"{gch}:{v}",
+                         "sim": round(here, 3),
+                         "best": best[1], "best_sim": round(best[0], 3),
+                         "ok": here >= 0.90})
+    return {"rows": rows,
+            "ok": sum(1 for r in rows if r["ok"]),
+            "n": len(rows),
+            "misplaced": [r for r in rows if not r["ok"]]}
+
+
+_ACC = re.compile(r"[^\w]+", re.UNICODE)
+
+
+def _sim(a, b):
+    import difflib
+    import unicodedata
+
+    def norm(s):
+        s = unicodedata.normalize("NFD", s or "")
+        s = "".join(ch for ch in s if not unicodedata.combining(ch))
+        return _ACC.sub("", s).lower()
+
+    a, b = norm(a), norm(b)
+    return difflib.SequenceMatcher(a=a, b=b).ratio() if a and b else 0.0
+
+
 # ---------------------------------------------------------------------------
 def collate():
     mt = read_mt()
     greek, gorder = read_greek({10, 50})
-    stipp = read_stipp({10, 43})
+    stipp, stipp_empty, stipp_greek, stipp_notes = read_stipp({10, 43})
 
     data = {"passages": [], "stipp": bool(stipp)}
     for p in PASSAGES:
@@ -475,10 +548,23 @@ def collate():
     data["greek"] = {f"{c}:{v}": t for (c, v), t in greek.items()}
     data["greek_order"] = gorder
     data["stipp_pluses"] = {f"{c}:{v}": ph for (c, v), ph in stipp.items()}
+    data["stipp_empty"] = [f"{c}:{v}" for c, v in stipp_empty]
+    data["stipp_notes"] = stipp_notes
+    data["greek_check"] = greek_check(stipp_greek, greek)
     return data
 
 
 def report(d):
+    gc = d["greek_check"]
+    print("=" * 72)
+    print(f"Stipp's Greek panel against Rahlfs: {gc['ok']} of {gc['n']} verses agree")
+    for r in gc["misplaced"]:
+        print(f"  {r['ref']}: {r['sim']:.2f} against Greek {r['greek_ref']}, "
+              f"but {r['best_sim']:.2f} against Greek {r['best']}")
+    print(f"Stipp gives no alexandrian column at all: {', '.join(d['stipp_empty'])}")
+    for sig, ns in d["stipp_notes"].items():
+        print(f"Stipp's apparatus cites {sig} at "
+              f"{', '.join(str(n['ch']) + ':' + str(n['v']) for n in ns)}")
     print("=" * 72)
     print("Jeremiah 10, order of the verses")
     for k in ("mt", "scroll", "greek"):
