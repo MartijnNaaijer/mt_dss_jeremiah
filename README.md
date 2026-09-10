@@ -1,41 +1,130 @@
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 
-# Jeremiah — Masoretic Text ∥ Dead Sea Scrolls
+# The short edition of Jeremiah at Qumran
 
-The book of Jeremiah set verse by verse against the Qumran manuscripts of it:
-2Q13, 4Q70, 4Q71, 4Q72, 4Q72a and 4Q72b, which between them reach 305 of its
-1,364 verses, in 32 of its 52 chapters.
+Jeremiah comes down in two editions. The Masoretic Text is about an eighth
+longer than the text the Greek translator worked from, and in places it puts
+the material in another order. Of the six Jeremiah scrolls from the Judaean
+Desert, four go with the Masoretic Text. **Two do not.**
 
-The repository is new and holds nothing yet but its licence.
+This is a single page setting those two — **4QJerᵇ** (4Q71, Jeremiah 10) and
+**4QJerᵈ** (4Q72a, Jeremiah 43) — against the Masoretic Text and the Greek.
 
-Jeremiah is already covered by the whole-Bible edition, chapter by chapter,
-with the reconstructed letters marked and the morphology of every word on
-hover:
+https://martijnnaaijer.github.io/mt_dss_jeremiah
 
-https://martijnnaaijer.github.io/mt_dss_hebrew_bible/Jeremiah.html
+## The point of it
+
+Only 10% of 4QJerᵇ and 45% of 4QJerᵈ is ink; the rest of what a transcription
+prints is a modern editor's reconstruction, and a reconstruction supplied from
+the Masoretic Text cannot then be evidence against it. The page keeps three
+things apart throughout, and says of every claim which of them it rests on:
+
+- **ink** — letters on the leather
+- **reconstruction** — letters an editor supplied inside a hole
+- **space** — what follows from the size of the hole, and from neither of the above
+
+The two scrolls turn out to carry evidence of two different kinds, and the page
+is built around that rather than around a single claim.
+
+### 4QJerᵇ: the argument is space
+
+Its surviving ink is 114 letters in 15 runs, none of them touching another, so
+no two of its words stand side by side on the leather. Nothing about the
+arrangement of Jeremiah 10 can be read off it directly.
+
+What can be measured is this. The ink falls near the end of each line, which
+fixes where particular words stood. Line 5 ends with `הב ייפהו ב מקבות`, from
+10:4; line 6 ends with `תכלת ו ארגמן`, from 10:9. They are consecutive lines of
+one fragment, so whatever stood between those two words took up a single line —
+about 96 letters, on this fragment's own average.
+
+| | letters |
+| --- | ---: |
+| the space there | about 96 |
+| 10:4 running straight on to 10:9 | 49 |
+| the Masoretic Text, with 10:5–8 in between | **238** |
+
+The Masoretic arrangement asks for two and a half lines of writing in the space
+of one. That settles that verses 5 to 8 as the Masoretic Text has them were not
+there. It does not by itself settle the order of what was, and the page says so.
+
+### 4QJerᵈ: the argument is ink
+
+Two words that are both ink and stand side by side are a **join**, and a join
+is testimony: whatever the Masoretic Text has between them was not in this
+copy. It is the only kind of omission a manuscript can witness to. There are
+five such places in Jeremiah 43, and they do not all point the same way.
+
+| | the Masoretic Text has | the scroll | |
+| --- | --- | --- | --- |
+| 43:6 | רב טבחים | lacks it | with the Greek |
+| 43:6 | בן שׁפן | lacks it | with the Greek |
+| 43:7 | עד | lacks it | with the Greek |
+| 43:9 | בית פרעה | lacks it | shorter than both |
+| 43:9 | אשׁר | carries it | with the Masoretic Text |
+
+Three of the five go with the Greek, one with the Masoretic Text, and one with
+neither. 4QJerᵈ is close to the text behind the Greek without being a copy of
+it, and the page reports that rather than rounding it off.
 
 ## Sources & credits
 
-- **Masoretic Text:** the ETCBC [BHSA](https://github.com/ETCBC/bhsa) dataset.
+- **Masoretic Text:** the ETCBC [BHSA](https://github.com/ETCBC/bhsa) dataset,
+  version 2021.
 - **Judaean Desert manuscripts:** the ETCBC [dss](https://github.com/ETCBC/dss)
-  dataset (Martin Abegg's transcription).
-- Both are distributed in Text-Fabric (`.tf`) format and are read with
-  [Context-Fabric](https://context-fabric.ai), the successor to
-  [Text-Fabric](https://github.com/annotation/text-fabric).
+  dataset, version 2.0 (Martin Abegg's transcription), in which every sign
+  carries a flag saying whether it is on the leather or supplied.
+- **Greek:** Rahlfs 1935, from the
+  [LXX](https://github.com/eliranwong/LXX-Rahlfs-1935) dataset. Greek Jeremiah
+  runs on its own versification: Greek 50 is Masoretic 43, while in chapter 10
+  the numbers agree and it is the verses themselves that differ.
+- For **which Masoretic words are absent from the Greek**, the page follows
+  Hermann-Josef Stipp, *Textkritische Synopse zum Jeremiabuch*, 15. korrigierte
+  interne Auflage (2021), as parsed in the companion study. Every reading it is
+  relied on for was checked against Rahlfs directly.
+- All three corpora are read with [Context-Fabric](https://context-fabric.ai),
+  the successor to [Text-Fabric](https://github.com/annotation/text-fabric).
 
-Please consult and respect the licence and attribution terms of the BHSA and
-DSS datasets before reusing this material.
+Please consult and respect the licence and attribution terms of those datasets
+before reusing this material.
+
+## How it was made
+
+`src/collate.py` is the measurement and writes no HTML; `src/build.py` turns
+its output into `docs/index.html`. No figure or reading on the page is typed in
+by hand. Run the measurement on its own to see the findings as a table:
+
+```bash
+pip install -r requirements.txt
+
+git clone --depth 1 https://github.com/ETCBC/dss.git
+git clone --depth 1 https://github.com/ETCBC/bhsa.git
+
+python src/collate.py          # the evidence, as text
+python src/build.py            # the evidence, as the page
+```
+
+`BHSA_TF`, `DSS_TF` and `LXX_TF` override the corpus locations, which default
+to the usual `~/text-fabric-data` cache. `SYNOPSE` points at the parsed Stipp
+data; without it the page builds, and the column saying whether the Greek has a
+reading is left empty.
+
+## Companion
+
+The whole Hebrew Bible verse by verse against the manuscripts that preserve it:
+[mt_dss_hebrew_bible](https://github.com/MartijnNaaijer/mt_dss_hebrew_bible).
 
 ## Licence
 
-Jeremiah — Masoretic Text ∥ Dead Sea Scrolls © 2026 by Martijn Naaijer is
-licensed under
-[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). The full legal
-code is in [LICENSE](LICENSE).
+The short edition of Jeremiah at Qumran © 2026 by Martijn Naaijer is licensed
+under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). The full
+legal code is in [LICENSE](LICENSE).
 
 You may share and adapt this material for non-commercial purposes, giving
 credit and indicating any changes.
 
-That covers this repository's own work. It does not cover the text and
-morphology of the ETCBC BHSA and dss datasets, which carry the terms of those
-datasets. Check them before reusing the material itself.
+That covers this repository's own work: `src/collate.py`, `src/build.py`, the
+stylesheet, and the page they produce. It does not cover the text and
+morphology those pages reproduce, which come from the ETCBC BHSA and dss
+datasets and from Rahlfs, and carry the terms of those datasets. Check them
+before reusing the material itself.

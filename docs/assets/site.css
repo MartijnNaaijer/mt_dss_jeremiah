@@ -1,0 +1,224 @@
+/* ---------------------------------------------------------------------------
+   The short edition of Jeremiah at Qumran.
+
+   Three witnesses, so three identities, and the colour is spent on the
+   argument rather than on the parties to it.  Ochre marks material only the
+   Masoretic Text has.  The mineral blue-green of the Dead Sea, carried over
+   from the companion edition, marks one thing only: a claim that rests on ink
+   rather than on an editor's reconstruction.
+   --------------------------------------------------------------------------- */
+
+:root {
+  --ink:       #17140f;
+  --ink-2:     #5b5348;
+  --ink-3:     #8b8377;
+  --page:      #fcfbf8;
+  --panel:     #ffffff;
+  --rule:      #e4dfd3;
+  --rule-2:    #f1ede3;
+  --leather:   #f6f0e2;
+  --leather-2: #e6dcc4;
+  --scribe:    #3d3529;
+  --rec:       #b3a894;
+  --traces:    #cdc4b0;
+  --sea:       #0e6b75;
+  --sea-2:     #0a545c;
+  --sea-soft:  #e2eff0;
+  --sea-line:  #a4c9cb;
+  --plus:      #8a5e10;   /* material only the Masoretic Text has */
+  --plus-soft: #f8eed6;
+  --plus-line: #ddc48a;
+
+  --heb:  "Frank Ruhl Libre", "SBL Hebrew", "Taamey Frank CLM", "Ezra SIL",
+          "Times New Roman", serif;
+  --grk:  Cardo, "SBL Greek", "Gentium Plus", "Palatino Linotype", Georgia, serif;
+  --lat:  Spectral, Georgia, "Times New Roman", serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+
+  --wrap: 60rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #ece7dd; --ink-2: #a49c8e; --ink-3: #7b7365;
+    --page: #14130f; --panel: #1b1915; --rule: #322e26; --rule-2: #262219;
+    --leather: #221e17; --leather-2: #352d1c; --scribe: #d9d0be;
+    --rec: #6d6454; --traces: #565040;
+    --sea: #63c3cc; --sea-2: #8ad9e0; --sea-soft: #10322f; --sea-line: #2f6265;
+    --plus: #d7a548; --plus-soft: #2d2410; --plus-line: #5c4a1e;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--lat);
+  font-size: 16px;
+  line-height: 1.62;
+}
+
+a { color: var(--sea); text-underline-offset: 2px; }
+a:hover { color: var(--sea-2); }
+:focus-visible { outline: 2px solid var(--sea); outline-offset: 2px; border-radius: 2px; }
+
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 1.5rem; }
+
+/* --- masthead ------------------------------------------------------------ */
+
+.masthead { background: var(--panel); border-bottom: 1px solid var(--rule); }
+.masthead .wrap { padding-block: 3rem 2.1rem; }
+
+.title { display: flex; align-items: baseline; justify-content: space-between;
+         gap: 1.5rem; flex-wrap: wrap; }
+.title h1 { margin: 0; font-size: 2.4rem; font-weight: 600; line-height: 1.12;
+            letter-spacing: -0.015em; max-width: 22ch; }
+.title .he { font-family: var(--heb); direction: rtl; font-size: 2rem;
+             font-weight: 400; color: var(--ink-2); }
+
+.standfirst { margin: 1.2rem 0 0; max-width: 44rem; font-size: 1.08rem; color: var(--ink-2); }
+.standfirst b { color: var(--ink); font-weight: 500; }
+.standfirst + .standfirst { margin-top: 0.7rem; }
+
+/* --- sections ------------------------------------------------------------ */
+
+section { padding-block: 2.8rem 0; }
+section > h2 { margin: 0 0 0.3rem; font-size: 1.45rem; font-weight: 600; max-width: 30ch; }
+section > .lede { margin: 0 0 1.5rem; max-width: 42rem; color: var(--ink-2); }
+h3 { margin: 2rem 0 0.6rem; font-size: 1.02rem; font-weight: 600; }
+p { max-width: 42rem; }
+
+/* --- the order of the verses --------------------------------------------- */
+
+.tracks { margin: 0 0 1rem; border-top: 1px solid var(--rule); }
+.track { display: grid; grid-template-columns: 9.5rem 1fr; gap: 1rem;
+         align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--rule-2); }
+.track .who { font-size: 0.92rem; font-weight: 500; }
+.track .who span { display: block; font-size: 0.76rem; color: var(--ink-3); font-weight: 400; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.chip {
+  min-width: 2.05rem; padding: 0.2rem 0.35rem; text-align: center;
+  border: 1px solid var(--rule); border-radius: 3px; background: var(--panel);
+  font-size: 0.9rem; font-variant-numeric: tabular-nums; color: var(--ink);
+}
+.chip.gone { color: var(--ink-3); border-style: dashed; background: transparent;
+             text-decoration: line-through; text-decoration-color: var(--plus-line); }
+.chip.moved { border-color: var(--sea); color: var(--sea); font-weight: 500; }
+.chip.only { background: var(--plus-soft); border-color: var(--plus-line); color: var(--plus); }
+
+/* --- the fragment diagram ------------------------------------------------ */
+
+.frag { margin: 1.4rem 0 0; }
+.frag-row { display: grid; grid-template-columns: 2.6rem 1fr; gap: 0.8rem;
+            align-items: center; margin-bottom: 4px; }
+.frag-row .n { font-size: 0.76rem; color: var(--ink-3); text-align: right;
+               font-variant-numeric: tabular-nums; }
+.bar { position: relative; height: 15px; background: var(--leather);
+       border: 1px solid var(--leather-2); border-radius: 2px; }
+.bar i { position: absolute; top: -1px; bottom: -1px; background: var(--scribe);
+         border-radius: 1px; }
+.frag-row.focus .bar { border-color: var(--sea); box-shadow: 0 0 0 2px var(--sea-soft); }
+.frag-row .tag { grid-column: 2; font-size: 0.76rem; color: var(--sea); margin-top: 2px; }
+
+/* --- the measurement ----------------------------------------------------- */
+
+.scales { margin: 1.8rem 0 0; display: grid; gap: 0.9rem; }
+.scale { display: grid; grid-template-columns: 12rem 1fr auto; gap: 0.9rem;
+         align-items: center; }
+.scale .lbl { font-size: 0.9rem; }
+.scale .lbl span { display: block; font-size: 0.76rem; color: var(--ink-3); }
+.scale .meter { height: 22px; background: var(--rule-2); border-radius: 3px;
+                position: relative; overflow: hidden; }
+.scale .meter i { position: absolute; inset: 0 auto 0 0; border-radius: 3px; }
+.scale.have .meter i { background: var(--sea); }
+.scale.need .meter i { background: var(--plus); }
+.scale.short .meter i { background: var(--sea-line); }
+.scale .num { font-size: 0.9rem; font-variant-numeric: tabular-nums; color: var(--ink-2);
+              white-space: nowrap; }
+
+/* --- evidence table ------------------------------------------------------ */
+
+.joins { margin: 1.2rem 0 0; border-top: 1px solid var(--rule); }
+.join { padding: 0.95rem 0; border-bottom: 1px solid var(--rule-2); }
+.join .hd { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap;
+            margin-bottom: 0.45rem; }
+.join .ref { font-size: 0.84rem; color: var(--ink-3); font-variant-numeric: tabular-nums;
+             min-width: 3.4rem; }
+.verdict { font-size: 0.76rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+           border: 1px solid var(--rule); color: var(--ink-2); background: var(--panel); }
+.verdict.greek { border-color: var(--sea-line); color: var(--sea); background: var(--sea-soft); }
+.verdict.mt { border-color: var(--plus-line); color: var(--plus); background: var(--plus-soft); }
+.verdict.alone { border-color: var(--rule); color: var(--ink-2); }
+.join .say { font-size: 0.92rem; color: var(--ink-2); margin: 0; max-width: 46rem; }
+.join .heb { font-family: var(--heb); direction: rtl; text-align: right;
+             font-size: 1.35rem; line-height: 1.85; margin: 0.25rem 0; }
+.join .heb .gap { color: var(--plus); background: var(--plus-soft);
+                  border-radius: 3px; padding: 0 0.18em; }
+.join .heb .keep { color: var(--sea); }
+
+/* --- the collation ------------------------------------------------------- */
+
+.verse { display: grid; grid-template-columns: 3rem 1fr; gap: 0 0.75rem;
+         padding: 0.85rem 0; border-bottom: 1px solid var(--rule-2); }
+.verse .vn { text-align: right; font-size: 0.84rem; color: var(--ink-3);
+             padding-top: 0.5rem; font-variant-numeric: tabular-nums; }
+.mt { direction: rtl; text-align: right; font-family: var(--heb);
+      font-size: 1.6rem; line-height: 1.95; }
+.mt .only { color: var(--plus); }
+.mt .only.onink { background: var(--plus-soft); border-radius: 3px; padding: 0 0.15em; }
+
+.wit { margin-top: 0.5rem; padding: 0.5rem 0.8rem 0.6rem; background: var(--leather);
+       border-inline-start: 2px solid var(--leather-2); border-radius: 4px; }
+.wit .sg { font-family: var(--mono); font-size: 0.72rem; color: var(--scribe);
+           opacity: 0.72; }
+.scroll { direction: rtl; text-align: right; font-family: var(--heb);
+          font-size: 1.45rem; line-height: 1.9; color: var(--scribe); }
+.scroll .rec { color: var(--rec); }
+.scroll .traces { color: var(--traces); }
+
+.grk { margin-top: 0.5rem; font-family: var(--grk); font-size: 1.16rem;
+       line-height: 1.7; color: var(--ink-2); }
+.grk .sg { font-family: var(--mono); font-size: 0.72rem; color: var(--ink-3);
+           margin-inline-end: 0.5rem; }
+.absent { margin-top: 0.4rem; font-size: 0.84rem; font-style: italic; color: var(--ink-3); }
+
+/* --- notes and footer ---------------------------------------------------- */
+
+.note { margin: 1.6rem 0 0; padding: 1rem 1.2rem 1.1rem; background: var(--panel);
+        border: 1px solid var(--rule); border-radius: 5px; font-size: 0.92rem;
+        color: var(--ink-2); }
+.note h3 { margin: 0 0 0.4rem; font-size: 0.95rem; color: var(--ink); }
+.note p { margin: 0 0 0.6rem; max-width: none; }
+.note p:last-child { margin-bottom: 0; }
+.note b { color: var(--ink); font-weight: 500; }
+
+.key { display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; margin: 0.6rem 0 0;
+       font-size: 0.86rem; color: var(--ink-2); }
+.key span { display: inline-flex; align-items: baseline; gap: 0.4rem; }
+.key .sw { width: 0.8rem; height: 0.8rem; border-radius: 2px; align-self: center; }
+
+footer { border-top: 1px solid var(--rule); margin-top: 3.5rem;
+         padding-block: 1.6rem 3rem; font-size: 0.84rem; color: var(--ink-3); }
+footer p { margin: 0 0 0.45rem; max-width: 44rem; }
+
+@media (max-width: 46rem) {
+  :root { --wrap: 100%; }
+  .wrap { padding: 0 1rem; }
+  .title h1 { font-size: 1.85rem; }
+  .track { grid-template-columns: 1fr; gap: 0.4rem; }
+  .scale { grid-template-columns: 1fr; gap: 0.3rem; }
+  .scale .num { text-align: right; }
+  .verse { grid-template-columns: 2.1rem 1fr; }
+  .mt { font-size: 1.42rem; }
+  .scroll { font-size: 1.3rem; }
+}
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+.join .gl { margin: 0.15rem 0 0; font-size: 0.86rem; color: var(--ink-3); max-width: 46rem; }
+.join .gl i { color: var(--ink-2); }
+.join .say { color: var(--ink-2); }
