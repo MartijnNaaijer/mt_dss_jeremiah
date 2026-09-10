@@ -276,6 +276,27 @@ def verdict(scroll_by_verse, ch, vs, mt_words, phrase):
             "text": text}
 
 
+def unit(words, i, back):
+    """The whole graphical unit around word i: the ETCBC splits what the scribe
+    wrote as one, and an empty `after` is where it must be joined again."""
+    lo = hi = i
+    if back:
+        while lo > 0 and not words[lo - 1]["after"]:
+            lo -= 1
+    else:
+        while hi + 1 < len(words) and not words[hi]["after"]:
+            hi += 1
+    return words[lo:hi + 1]
+
+
+def mt_run(mt_words, lo, hi):
+    """Masoretic words lo..hi as they are written, trailers and all."""
+    out = ""
+    for i in range(lo, hi):
+        out += mt_words[i]["cons"] + (mt_words[i]["trailer"] if i < hi - 1 else "")
+    return out.strip()
+
+
 def ink_joins(mt_words, scroll_words):
     """Where the leather itself says what did not stand in the scroll.
 
@@ -301,10 +322,13 @@ def ink_joins(mt_words, scroll_words):
         lo, hi = m[j] + 1, m[j + 1]
         if hi <= lo:
             continue                          # the two are adjacent in the MT too
-        gap = " ".join(mt_words[i]["cons"] for i in range(lo, hi)).strip()
+        gap = mt_run(mt_words, lo, hi)
         if not gap:
             continue
-        joins.append({"left": sw[j]["cons"], "right": sw[j + 1]["cons"],
+        left, right = unit(sw, j, back=True), unit(sw, j + 1, back=False)
+        joins.append({"left": "".join(w["cons"] for w in left),
+                      "right": "".join(w["cons"] for w in right),
+                      "left_words": left, "right_words": right,
                       "mt": gap,
                       "gloss": " ".join(mt_words[i]["gloss"] for i in range(lo, hi)).strip()})
     return joins

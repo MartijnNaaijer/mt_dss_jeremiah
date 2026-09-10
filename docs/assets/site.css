@@ -222,3 +222,8 @@ footer p { margin: 0 0 0.45rem; max-width: 44rem; }
 .join .gl { margin: 0.15rem 0 0; font-size: 0.86rem; color: var(--ink-3); max-width: 46rem; }
 .join .gl i { color: var(--ink-2); }
 .join .say { color: var(--ink-2); }
+
+/* a graphical unit quoted beside a gap may itself contain supplied letters;
+   the blue means ink, so they must not borrow it */
+.join .heb .keep .rec { color: var(--rec); }
+.join .heb .keep .traces { color: var(--traces); }

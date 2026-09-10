@@ -63,7 +63,7 @@ def scroll_html(words):
             if s.get("unc"):
                 parts.append("̇")
         close()
-        parts.append(w["after"] or " ")
+        parts.append(w["after"])          # empty means: written onto the next
     if inrec:
         parts.append("]")
     return "".join(parts).strip()
@@ -261,9 +261,9 @@ def joins_section(d):
   <div class="hd"><span class="ref">{p['ch']}:{jn['vs']}</span>
     <span class="verdict {cls}">{verdict}</span>
     <span class="ref">{p['name']}</span></div>
-  <p class="heb"><span class="keep">{esc(jn['left'])}</span>
+  <p class="heb"><span class="keep">{scroll_html(jn['left_words'])}</span>
      <span class="gap">{esc(jn['mt'])}</span>
-     <span class="keep">{esc(jn['right'])}</span></p>
+     <span class="keep">{scroll_html(jn['right_words'])}</span></p>
   <p class="gl">Masoretic only, glossed <i>{esc(glosses(jn['gloss']))}</i>.{extra}</p>
 </div>""")
 
